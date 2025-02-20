@@ -26,9 +26,33 @@ return -1; //retour au depart si l'entrée est invalide
 
     //supprime le retour à la ligne ajouté par fgets.
     void noretour (char *str) { //noretour = fonction qui supprime retour à la ligne (\n) ajouté par fgets à la fin de la chaîne
+    //void indique que la fonction ne retourn aucune valeur
+    // char * str : paramètre de la fonction. C'est un pointeur vers une chaîne de caractère (tableau de char)
+    //str est l'adresse mémoire du premier caractère de la chaîne
         size_t len=strlen(str); //calcule la longueur de la chaîne
+        //strlen prend un pointeur vers une chaîne (char *) en entrée, puis retourne le nombre de caractère dans la chaîne jusqu'au premier caractère nul (\0) mais sans l'inclure
+        //size_t : type de donnée non signé (unsigned) utilisé pour présenter tailles et longueurs, souvent utilisé pour les fonctions de manipulation de chaîne
+        //len : une variable qui stocke la longueur de la chaîne str
         if(len>0 && str[len - 1]== '\n'){ //verifie si le dernier caractère est un retour à la ligne
                 str[len - 1]= '\0'; //remplace le retour à la ligne par un caractère nul
+        //len>0 verifie que la chaîne n'est pas vide
+        //si len est 0, cela signifie que la chaîne est vide (soit str est une chaîne vide, soit elle contient uniquement le caractère nul \0)
+
+        //str[len-1]== '\n' : verifie si le dernier caractère de la chaîne est une retour à la ligne (\n)
+        //str[len-1] accède au dernier caractère de la chaîne (car les indices commencent à 0)
+        // \n est le caractère de retour à la ligne ajouté par fgets lorsque l'utilisateur appuie sur entrée
+        // && est un opérateur logique "ET", les deux conditions doivent être vraies pour que le bloc if soit executé
+
+        //dans str[len-1]= '\0'
+        //str[len-1] : accède au dernier caractère de la chaîne
+        //'\0' : la caractère nul, qui marque la fin d'une chaîne en C
+        // au final, remplace le retour à la ligne (\n) par une caractère nul (\0)
+        //cela tronque la chaîne en supprimant le retour à la ligne, ce qui est utile pour éviter les probèmes lors de la manipulation de la chaîne (par exemple lors de la comparaison avec strcmp ou strcasecmp) 
+       
+       // fgets inclut le retour à la ligne (\n) dans la chaîne lue. Par exemple si l'utilisateur tape "Pierre" et valide en appuyant sur entré, la chaîne sera "Pierre\n"
+       //ce retour à la ligne peut interferer avec les comparaisons de chaînes ou autre opérations. Par exemple strcmp("Pierre\n", "Pierre") retournera une difference même si les chaînes sont identiques sans le \n 
+       //noretour supprime ce retour à la ligne en le remplaçant par un caractère nul (\0), ce qui rend la chaîne plus facile à manipuler
+       
         }
     }
 

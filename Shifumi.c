@@ -3,7 +3,7 @@
 #include <string.h> //pour fonction de manipulation de chaînes comme strlen et strcasecmp
 #include <strings.h> //pour strcasecmp
 #include <time.h> //gère srand et rand
-#include <unistd.h>
+
 
 //Definition des constantes pour les differents choix possibles
 #define PIERRE 1

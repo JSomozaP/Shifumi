@@ -13,21 +13,21 @@
 
 //Definit les possibilités orthographiques pour les differentes propositions de reponses, en sachant qu'avec strcasecmp ce n'est pas sensible à la casse 
 int reportho(char * reponse){ //fonction pour interpreter la réponse utilisateur
-//reportho est une fonction qui prend une chaîne de caractère (reponse) et la compare avec les differentes options possibles
-//elle retourne la valeur correspondante (PIERRE, FEUILLE, CISEAUX, QUITTER) ou -1 si l'entrée est invalide
-if (strcasecmp(reponse, "1") == 0 || strcasecmp(reponse, "pierre") == 0|| strcasecmp(reponse, "PIERRE") == 0 || strcasecmp(reponse, "pIeRrE") == 0 || strcasecmp(reponse, "p") == 0)
-    return PIERRE; //renvoi PIERRE si la reponse correspond; Idem por les choix du dessous
-if (strcasecmp(reponse, "2") == 0 || strcasecmp(reponse, "feuille") == 0|| strcasecmp(reponse, "FEUILLE") == 0 || strcasecmp(reponse, "FeUiLlE") == 0 || strcasecmp(reponse, "f") == 0)
-    return FEUILLE;
-if (strcasecmp(reponse, "3") == 0 || strcasecmp(reponse, "ciseaux") == 0|| strcasecmp(reponse, "CISEAUX") == 0 || strcasecmp(reponse, "CiSeAuX") == 0 || strcasecmp(reponse, "c") == 0)
-    return CISEAUX;
-if (strcasecmp(reponse, "0") == 0 || strcasecmp(reponse, "quitter") == 0|| strcasecmp(reponse, "QUITTER") == 0 || strcasecmp(reponse, "QuItTeR") == 0 || strcasecmp(reponse, "q") ==0 || strcasecmp(reponse, "exit") ==0)
-    return QUITTER;
-return -1; //retour au depart si l'entrée est invalide
+    //reportho est une fonction qui prend une chaîne de caractère (reponse) et la compare avec les differentes options possibles
+    //elle retourne la valeur correspondante (PIERRE, FEUILLE, CISEAUX, QUITTER) ou -1 si l'entrée est invalide
+    if (strcasecmp(reponse, "1") == 0 || strcasecmp(reponse, "pierre") == 0|| strcasecmp(reponse, "PIERRE") == 0 || strcasecmp(reponse, "pIeRrE") == 0 || strcasecmp(reponse, "p") == 0)
+        return PIERRE; //renvoi PIERRE si la reponse correspond; Idem por les choix du dessous
+    if (strcasecmp(reponse, "2") == 0 || strcasecmp(reponse, "feuille") == 0|| strcasecmp(reponse, "FEUILLE") == 0 || strcasecmp(reponse, "FeUiLlE") == 0 || strcasecmp(reponse, "f") == 0)
+        return FEUILLE;
+    if (strcasecmp(reponse, "3") == 0 || strcasecmp(reponse, "ciseaux") == 0|| strcasecmp(reponse, "CISEAUX") == 0 || strcasecmp(reponse, "CiSeAuX") == 0 || strcasecmp(reponse, "c") == 0)
+        return CISEAUX;
+    if (strcasecmp(reponse, "0") == 0 || strcasecmp(reponse, "quitter") == 0|| strcasecmp(reponse, "QUITTER") == 0 || strcasecmp(reponse, "QuItTeR") == 0 || strcasecmp(reponse, "q") ==0 || strcasecmp(reponse, "exit") ==0)
+        return QUITTER;
+    return -1; //retour au depart si l'entrée est invalide
 }
 
     //supprime le retour à la ligne ajouté par fgets.
-    void noretour (char *str) { //noretour = fonction qui supprime retour à la ligne (\n) ajouté par fgets à la fin de la chaîne
+void noretour (char *str) { //noretour = fonction qui supprime retour à la ligne (\n) ajouté par fgets à la fin de la chaîne
     //void indique que la fonction ne retourn aucune valeur
     // char * str : paramètre de la fonction. C'est un pointeur vers une chaîne de caractère (tableau de char)
     //str est l'adresse mémoire du premier caractère de la chaîne
@@ -56,7 +56,7 @@ return -1; //retour au depart si l'entrée est invalide
        //noretour supprime ce retour à la ligne en le remplaçant par un caractère nul (\0), ce qui rend la chaîne plus facile à manipuler
        
         }
-    }
+}
 
 int main(){
     //initialisation des variables
@@ -93,18 +93,18 @@ int main(){
         if (fgets(reponse,sizeof(reponse),stdin)==NULL) { //récupère la réponse du joueur 1
             printf("\nErreur de saisie; \n");
             continue;  //recommence la boucle en cas d'erreur
-    }
-    noretour(reponse); //effectue la suppression du retour à la ligne pour qu'il n'y ait pas de soucis avec fgets
-    choixjoueur = reportho(reponse); //l'int p1 pioche les réponses du tableaux reportho et interprète sa réponse
+        }
+        noretour(reponse); //effectue la suppression du retour à la ligne pour qu'il n'y ait pas de soucis avec fgets
+        choixjoueur = reportho(reponse); //l'int p1 pioche les réponses du tableaux reportho et interprète sa réponse
 
-    if(choixjoueur==QUITTER) { //si l'utilisateur veut quitter
-        printf("\n Tu quitte le jeu. \n");
-        break; //effectue une sortie de boucle
-    }
-    else if(choixjoueur==-1) { //si l'entrée est invalide
-        printf("\nChoix invalide, retente. \n");
-        continue;
-    }
+        if(choixjoueur==QUITTER) { //si l'utilisateur veut quitter
+            printf("\n Tu quitte le jeu. \n");
+            break; //effectue une sortie de boucle
+        }
+        else if(choixjoueur==-1) { //si l'entrée est invalide
+            printf("\nChoix invalide, retente. \n");
+            continue;
+        }
    /*//tour du joueur 2
         printf("\n %s c'est à toi !\n\n", joueur2);
         if (fgets(reponse,sizeof(reponse),stdin)==NULL) {

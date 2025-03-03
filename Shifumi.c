@@ -10,6 +10,7 @@
 #define FEUILLE 2
 #define CISEAUX 3
 #define QUITTER 0
+#define BUF_SIZE 255
 
 //Definit les possibilités orthographiques pour les differentes propositions de reponses, en sachant qu'avec strcasecmp ce n'est pas sensible à la casse 
 int reportho(char * reponse){ //fonction pour interpreter la réponse utilisateur
@@ -58,6 +59,8 @@ void noretour (char *str) { //noretour = fonction qui supprime retour à la lign
         }
 }
 
+
+
 int main(){
     //initialisation des variables
     int scorejoueur = 0, scorepc = 0; //score des joueurs
@@ -66,6 +69,10 @@ int main(){
     int choixjoueur, choixpc; //variable representant le choix des deux joueurs
     
     srand(time(NULL));
+   
+    
+        fscanf(fd,"%s : %d\n", joueur, scorejoueur);
+        fscanf(fd,"PC : %d\n", scorepc);
 
     //interface visuel pour afficher nom du jeu
     printf("\n\n\n------------------ Shifumi ! ------------------\n\n\n");
@@ -81,6 +88,8 @@ int main(){
     printf("\nJoueur 2, ton nom est : %s\n\n", joueur2);*/
     
     //Boucle principal du jeu, qui permet aux manches de s'enchaîner
+
+    
     while(1) {
         printf("Pierre, Feuille ou Ciseaux ?\n"); //interface visuelle
         printf("1. Pierre\n");
@@ -173,6 +182,11 @@ int main(){
     printf("%s : %d\n", joueur, scorejoueur);
     printf("PC : %d\n", scorepc);
 
+    FILE*fd=fopen("save1","r+");
+
+    fprintf(fd,"%s : %d\n", joueur, scorejoueur);
+    fprintf(fd,"PC : %d\n", scorepc);
+    
     return 0; //fin du programme
 }
     

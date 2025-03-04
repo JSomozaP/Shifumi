@@ -68,12 +68,27 @@ int main(){
     char joueur [20]; //Nom des joueurs (limite de 20 caractères pour plus de flexibilité)
     int choixjoueur, choixpc; //variable representant le choix des deux joueurs
     
-    srand(time(NULL));
-   
     
-        fscanf(fd,"%s : %d\n", joueur, scorejoueur);
-        fscanf(fd,"PC : %d\n", scorepc);
+    FILE*save1save=fopen("save1","r+"); //pour enregistrer la sauvegarde
+    FILE*save1load=fopen("save1","r"); //pour charger la sauvegarde
+    
+    //test si fichier non existant
+    if (save1save == NULL || save1load == NULL)
+    {
+        printf("Erreur! Aucun fichier présent\n");
+        exit(-1);
+    }
+    
+    fscanf(save1load,"%d\n",&scorejoueur);
+    fscanf(save1load,"%d\n",&scorepc);
+    printf("\nReprise des scores :\n");
+    printf("Joueur : %d\n", scorejoueur);
+    printf("PC : %d\n", scorepc);
 
+    fclose(save1load);
+    
+    srand(time(NULL));
+    
     //interface visuel pour afficher nom du jeu
     printf("\n\n\n------------------ Shifumi ! ------------------\n\n\n");
     //Effectue la demande du nom du joueur 1
@@ -88,7 +103,7 @@ int main(){
     printf("\nJoueur 2, ton nom est : %s\n\n", joueur2);*/
     
     //Boucle principal du jeu, qui permet aux manches de s'enchaîner
-
+    
     
     while(1) {
         printf("Pierre, Feuille ou Ciseaux ?\n"); //interface visuelle
@@ -96,8 +111,8 @@ int main(){
         printf("2. Feuille\n");
         printf("3. Ciseaux\n");
         printf("0. Quitter\n\n");
-
-    //lance le tour du joueur 1
+        
+        //lance le tour du joueur 1
         printf("\n %s c'est à toi !\n\n", joueur);
         if (fgets(reponse,sizeof(reponse),stdin)==NULL) { //récupère la réponse du joueur 1
             printf("\nErreur de saisie; \n");
@@ -105,7 +120,7 @@ int main(){
         }
         noretour(reponse); //effectue la suppression du retour à la ligne pour qu'il n'y ait pas de soucis avec fgets
         choixjoueur = reportho(reponse); //l'int p1 pioche les réponses du tableaux reportho et interprète sa réponse
-
+        
         if(choixjoueur==QUITTER) { //si l'utilisateur veut quitter
             printf("\n Tu quitte le jeu. \n");
             break; //effectue une sortie de boucle
@@ -114,33 +129,33 @@ int main(){
             printf("\nChoix invalide, retente. \n");
             continue;
         }
-   /*//tour du joueur 2
+        /*//tour du joueur 2
         printf("\n %s c'est à toi !\n\n", joueur2);
         if (fgets(reponse,sizeof(reponse),stdin)==NULL) {
             printf("\nErreur de saisie; \n");
             continue; 
-    }
-
-    noretour(reponse);
-    p2 = reportho(reponse);
+            }
+            
+            noretour(reponse);
+            p2 = reportho(reponse);
 
     if(p2==QUITTER) {
         printf("\nTu quitte le jeu. \n");
         break;
-    }
-    else if(p2==-1) {
-        printf("\nChoix invalide, retente. \n");
-        continue;
-    } */
-
-   //tour du pc avec génération d'un choix aléatoire
-   choixpc=(rand()%3)+1; //génère un nombre entre 1 et 3, couvrant le champs de possibilité de choix
-
-   //affichage des choix
-   printf("\n%s fait %s !\n", joueur, (choixjoueur==PIERRE) ? "Pierre" : (choixjoueur==FEUILLE) ? "Feuille" : "Ciseaux");
-   // "?" utilisation d'un opérateur ternaire qui permet de faire une condition en une seule ligne
-   //Utilisation d'un opérateur ternaire imbriqué qui fonctionne comme une condition if-else en une seule ligne
-   //première condition : choixjoueur==Pierre
+        }
+        else if(p2==-1) {
+            printf("\nChoix invalide, retente. \n");
+            continue;
+            } */
+           
+           //tour du pc avec génération d'un choix aléatoire
+           choixpc=(rand()%3)+1; //génère un nombre entre 1 et 3, couvrant le champs de possibilité de choix
+           
+           //affichage des choix
+           printf("\n%s fait %s !\n", joueur, (choixjoueur==PIERRE) ? "Pierre" : (choixjoueur==FEUILLE) ? "Feuille" : "Ciseaux");
+           // "?" utilisation d'un opérateur ternaire qui permet de faire une condition en une seule ligne
+           //Utilisation d'un opérateur ternaire imbriqué qui fonctionne comme une condition if-else en une seule ligne
+           //première condition : choixjoueur==Pierre
    //si c'est vrai, retourne "Pierre", et si c'est faux, passe à la condition suivante
    //deuxième condition : choixjoueur==Feuille
    //si c'est vrai, retourne "Feuille", si c'est faux passe à la valeur par defaut
@@ -150,43 +165,42 @@ int main(){
    /*const char *choixnoms[]={"", "Pierre", "Feuille", "Ciseaux"};
    printf("\n%s fait %s !\n", joueur, choixnoms[choixjoueur]);
    printf("PC fait %s !\n", choixnoms[choixpc]); */
-    
-
-    //Definit toutes les conditions de réponses pour une égalité, une victoire du joueur1 ou du joueur2
-    if ((choixjoueur==PIERRE && choixpc==PIERRE)|| (choixjoueur==FEUILLE && choixpc==FEUILLE) || (choixjoueur==CISEAUX && choixpc==CISEAUX)) {
+   
+   
+   //Definit toutes les conditions de réponses pour une égalité, une victoire du joueur1 ou du joueur2
+   if ((choixjoueur==PIERRE && choixpc==PIERRE)|| (choixjoueur==FEUILLE && choixpc==FEUILLE) || (choixjoueur==CISEAUX && choixpc==CISEAUX)) {
         scorejoueur==0, scorepc==0;
         printf("\nVous avez fait égalité !\n"); //le score ne change pas
     }
     
     if ((choixjoueur==PIERRE && choixpc==CISEAUX) || (choixjoueur==CISEAUX && choixpc==FEUILLE) || (choixjoueur==FEUILLE && choixpc==PIERRE)) {
-          scorejoueur++;
+        scorejoueur++;
         printf("\n %s gagne ce duel !\n", joueur); //incrémente le score d'1pt pour joueur1
         
     }
-           
+    
     if ((choixpc==PIERRE && choixjoueur==CISEAUX) || (choixpc==CISEAUX && choixjoueur==FEUILLE)|| (choixpc==FEUILLE && choixjoueur==PIERRE)) {
-            scorepc++;
+        scorepc++;
         printf("\n PC gagne ce duel !\n"); //incrémente le score d'1pt pour joueur2
         
     }
-
+    
     //affichage des scores
     printf("\nScores :\n");
     printf("%s : %d\n", joueur, scorejoueur);
     printf("PC : %d\n", scorepc);
     printf("-------------------------------------\n");    
 }
-    //Affichage final des scores
-    printf("\n##### GAME OVER #####\n");
-    printf("\nScores finaux :\n");
-    printf("%s : %d\n", joueur, scorejoueur);
-    printf("PC : %d\n", scorepc);
+//Affichage final des scores
+printf("\n##### GAME OVER #####\n");
+printf("\nScores finaux :\n");
+printf("%s : %d\n", joueur, scorejoueur);
+printf("PC : %d\n", scorepc);
 
-    FILE*fd=fopen("save1","r+");
+fprintf(save1save,"%s : %d\n", joueur, scorejoueur);
+fprintf(save1save,"PC : %d\n", scorepc);
 
-    fprintf(fd,"%s : %d\n", joueur, scorejoueur);
-    fprintf(fd,"PC : %d\n", scorepc);
-    
-    return 0; //fin du programme
+
+return 0; //fin du programme
 }
-    
+

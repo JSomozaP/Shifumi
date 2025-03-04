@@ -67,26 +67,40 @@ int main(){
     char reponse [10]; //chaîne pour stocker la reponse utilisateur (limite de 10 caractères)
     char joueur [20]; //Nom des joueurs (limite de 20 caractères pour plus de flexibilité)
     int choixjoueur, choixpc; //variable representant le choix des deux joueurs
+    char reset[10];
     
     
-    FILE*save1save=fopen("save1","r+"); //pour enregistrer la sauvegarde
-    FILE*save1load=fopen("save1","r"); //pour charger la sauvegarde
-    
-    //test si fichier non existant
-    if (save1save == NULL || save1load == NULL)
-    {
-        printf("Erreur! Aucun fichier présent\n");
-        exit(-1);
+    FILE*save1=fopen("save1","r+"); //pour enregistrer la sauvegarde  / r+ lit et écrit 
+    if (save1 == NULL) {
+        save1 = fopen("save1", "w+"); //pour lire la sauvegarde  / w+ lit, écrit et supprime les données
+        if (save1 == NULL) { 
+            printf ("Erreur ! Ipossible d'ouvrir le fichier\n");
+            exit (-1);
+        }
     }
-    
-    fscanf(save1load,"%d\n",&scorejoueur);
-    fscanf(save1load,"%d\n",&scorepc);
-    printf("\nReprise des scores :\n");
-    printf("Joueur : %d\n", scorejoueur);
-    printf("PC : %d\n", scorepc);
 
-    fclose(save1load);
-    
+    printf("Voulez-vou réinitialiser les scores ? (oui/non) :");
+    fgets (reset, sizeof(reset), stdin);
+    reset[strcspn(reset, "\n")]=0; //supprime le retour à la ligne
+    //strcspn permet de comparer l'occurence de caractère d'une string à l'autre
+
+    if (strcasecmp(reset, "oui")==0){  //strcasecmp permet de comparer des chaînes de caractère tout en étant insensible à la casse, contrairement à strcmp
+        scorejoueur =0;
+        scorepc=0;
+        fseek(save1, 0, SEEK_SET);
+        fprintf(save1, "joueur : %d\n", scorejoueur);
+        fprintf(save1, "PC : %d\n", scorepc);
+        fflush(save1); //assure que les données sont ben écrites 
+        printf("\nLes scores ont été remis à zero !\n");
+    }
+
+    if (fscanf(save1,"joueur : %d\n",&scorejoueur)!=1) scorejoueur=0;
+    if (fscanf(save1,"PC : %d\n",&scorepc)!=1) scorepc =0;
+
+        printf("\nReprise des scores :\n");
+        printf("Joueur : %d\n", scorejoueur);
+        printf("PC : %d\n", scorepc);
+
     srand(time(NULL));
     
     //interface visuel pour afficher nom du jeu
@@ -96,7 +110,7 @@ int main(){
     fgets( joueur, sizeof(joueur), stdin ); //récupère le nom du joueur 1
     noretour(joueur); //supprime le retour à la ligne
     printf("\nJoueur, ton nom est : %s\n\n", joueur);
-
+    
     /*printf("\nJoueur 2, quel est ton nom ?\n\n");
     fgets( joueur2, sizeof(joueur2), stdin ); //récupère le nom du joueur 2
     noretour(joueur2);
@@ -138,11 +152,11 @@ int main(){
             
             noretour(reponse);
             p2 = reportho(reponse);
-
-    if(p2==QUITTER) {
-        printf("\nTu quitte le jeu. \n");
-        break;
-        }
+            
+            if(p2==QUITTER) {
+                printf("\nTu quitte le jeu. \n");
+                break;
+                }
         else if(p2==-1) {
             printf("\nChoix invalide, retente. \n");
             continue;
@@ -156,20 +170,20 @@ int main(){
            // "?" utilisation d'un opérateur ternaire qui permet de faire une condition en une seule ligne
            //Utilisation d'un opérateur ternaire imbriqué qui fonctionne comme une condition if-else en une seule ligne
            //première condition : choixjoueur==Pierre
-   //si c'est vrai, retourne "Pierre", et si c'est faux, passe à la condition suivante
-   //deuxième condition : choixjoueur==Feuille
-   //si c'est vrai, retourne "Feuille", si c'est faux passe à la valeur par defaut
-   //valeur par defaut : "Ciseaux", si aucune des conditions précédentes n'est vraie, retourne "Ciseaux"
-   printf("PC fait %s !\n", (choixpc ==PIERRE) ? "Pierre" : (choixpc == FEUILLE) ? "Feuille" : "Ciseaux");
-   //peut aussi être remplacé par un tableau de chaînes : 
-   /*const char *choixnoms[]={"", "Pierre", "Feuille", "Ciseaux"};
-   printf("\n%s fait %s !\n", joueur, choixnoms[choixjoueur]);
-   printf("PC fait %s !\n", choixnoms[choixpc]); */
-   
-   
-   //Definit toutes les conditions de réponses pour une égalité, une victoire du joueur1 ou du joueur2
-   if ((choixjoueur==PIERRE && choixpc==PIERRE)|| (choixjoueur==FEUILLE && choixpc==FEUILLE) || (choixjoueur==CISEAUX && choixpc==CISEAUX)) {
-        scorejoueur==0, scorepc==0;
+           //si c'est vrai, retourne "Pierre", et si c'est faux, passe à la condition suivante
+           //deuxième condition : choixjoueur==Feuille
+           //si c'est vrai, retourne "Feuille", si c'est faux passe à la valeur par defaut
+           //valeur par defaut : "Ciseaux", si aucune des conditions précédentes n'est vraie, retourne "Ciseaux"
+           printf("PC fait %s !\n", (choixpc ==PIERRE) ? "Pierre" : (choixpc == FEUILLE) ? "Feuille" : "Ciseaux");
+           //peut aussi être remplacé par un tableau de chaînes : 
+           /*const char *choixnoms[]={"", "Pierre", "Feuille", "Ciseaux"};
+           printf("\n%s fait %s !\n", joueur, choixnoms[choixjoueur]);
+           printf("PC fait %s !\n", choixnoms[choixpc]); */
+           
+           
+           //Definit toutes les conditions de réponses pour une égalité, une victoire du joueur1 ou du joueur2
+           if ((choixjoueur==PIERRE && choixpc==PIERRE)|| (choixjoueur==FEUILLE && choixpc==FEUILLE) || (choixjoueur==CISEAUX && choixpc==CISEAUX)) {
+               scorejoueur==0, scorepc==0;
         printf("\nVous avez fait égalité !\n"); //le score ne change pas
     }
     
@@ -191,14 +205,22 @@ int main(){
     printf("PC : %d\n", scorepc);
     printf("-------------------------------------\n");    
 }
+
 //Affichage final des scores
 printf("\n##### GAME OVER #####\n");
 printf("\nScores finaux :\n");
 printf("%s : %d\n", joueur, scorejoueur);
 printf("PC : %d\n", scorepc);
 
-fprintf(save1save,"%s : %d\n", joueur, scorejoueur);
-fprintf(save1save,"PC : %d\n", scorepc);
+/*fprintf(save1,"%s : %d\n", joueur, scorejoueur);
+fprintf(save1,"PC : %d\n", scorepc);*/
+
+//save des scores
+fseek (save1, 0, SEEK_SET); //replace le curseur au début pour pouvoir tout lire
+fprintf(save1, "joueur : %d\n", scorejoueur);
+fprintf(save1, "PC : %d\n", scorepc);
+
+fclose(save1);
 
 
 return 0; //fin du programme
